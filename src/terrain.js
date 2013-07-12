@@ -10,17 +10,6 @@ function Vertex(x, y, z){
 }
 
 
-var vertex;
-
-var midSteps;// = 3;
-var startX = 0;
-var startY = 0;
-var stepX;// = 22;
-var stepY;// = 22;
-var numX = 6;
-var numY = 6;
-
-
 //Finds the normal vector between 3 vertices
 function findNormal(p1, p2, p3){
 
@@ -187,11 +176,24 @@ function tick() {
 }
 
 var xx = -50;
-var yy = 0;
-var zz = -57;
-var rotX = -1.1;
+var yy = -30;
+var zz = -118
+var rotX = -1.5;
 var rotY = 0;
 var rotZ = -0.1;
+
+var vertex;
+
+var midSteps;// = 3;
+var startX = 0;
+var startY = 0;
+var stepX;// = 22;
+var stepY;// = 22;
+var numXStart = 6;
+var numYStart = 6;
+var numX;
+var numY;
+
 
 function drawScene3(){
     gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
@@ -201,7 +203,8 @@ function drawScene3(){
     mat4.perspective(45, gl.viewportWidth / gl.viewportHeight, 0.1, 1000.0, pMatrix);
 
     mat4.identity(mvMatrix);
-    //mat4.translate(mvMatrix, [-1.5, 0.0, -18.0]);
+    //mat4.lookAt([0, 0, 2], [0, 0, 0], [0, 1, 0], mvMatrix);
+    //mat4.translate(mvMatrix, [xx , yy, zz]);
     mat4.translate(mvMatrix, [xx - numX/4, yy-numY/4, zz]);
     mat4.rotate(mvMatrix, rotX, [1, 0, 0]);
     mat4.rotate(mvMatrix, rotY, [0, 1, 0]);
@@ -289,6 +292,8 @@ poop[5][5] = parseInt(document.getElementById("t36").value);
 
     var i = 0;
     var j = 0;
+    numX = numXStart;
+    numY = numYStart;
     vertex = new Array();
 
     for(i = 0; i < numY; i++){
@@ -301,6 +306,7 @@ poop[5][5] = parseInt(document.getElementById("t36").value);
         }
     }
 
+    
     var k = 0;
     var vNew = new Array();
     for(k = 0; k < midSteps; k++){
@@ -310,7 +316,7 @@ poop[5][5] = parseInt(document.getElementById("t36").value);
             for(j = 0; j < numX-1; j++){
                 var v= new Vertex((vertex[(i*numX + j)].x + vertex[(i*numX + j + 1)].x)/2,
                     (vertex[(i*numX + j)].y + vertex[(i*numX + j + 1)].y)/2,
-                    (vertex[(i*numX + j)].z + vertex[(i*numX + j + 1)].z)/2 + Math.random()*2 - 1);
+                    (vertex[(i*numX + j)].z + vertex[(i*numX + j + 1)].z)/2 + Math.floor((Math.random()*parseInt(document.getElementById("disHigh").value) + parseInt(document.getElementById("disLow").value))));
                 vNew.push(vertex[(i*numX + j)]);
                 vNew.push(v);
             }
@@ -319,23 +325,23 @@ poop[5][5] = parseInt(document.getElementById("t36").value);
             for(j = 0; j < numX-1; j++){
                 var v = new Vertex((vertex[(i*numX + j)].x + vertex[(i*numX + j)].x)/2,
                     (vertex[(i*numX + j)].y + vertex[((i+1)*numX + j)].y)/2,
-                    (vertex[(i*numX + j)].z + vertex[((i+1)*numX + j)].z)/2 + Math.random()*2 - 1);
+                    (vertex[(i*numX + j)].z + vertex[((i+1)*numX + j)].z)/2 + Math.floor((Math.random()*parseInt(document.getElementById("disHigh").value) + parseInt(document.getElementById("disLow").value))));
                 vNew.push(v);
                 v = new Vertex((vertex[(i*numX + j)].x + vertex[(i*numX + j + 1)].x)/2,
                     (vertex[(i*numX + j)].y + vertex[((i+1)*numX + j + 1)].y)/2,
-                    (vertex[(i*numX + j)].z + vertex[((i+1)*numX + j + 1)].z)/2 + Math.random()*2 - 1);
+                    (vertex[(i*numX + j)].z + vertex[((i+1)*numX + j + 1)].z)/2 + Math.floor((Math.random()*parseInt(document.getElementById("disHigh").value) + parseInt(document.getElementById("disLow").value))));
                 vNew.push(v);
             }
             var v = new Vertex((vertex[(i*numX + j)].x + vertex[(i*numX + j)].x)/2,
                 (vertex[(i*numX + j)].y + vertex[((i+1)*numX + j)].y)/2,
-                (vertex[(i*numX + j)].z + vertex[((i+1)*numX + j)].z)/2 + Math.random()*2 - 1);
+                (vertex[(i*numX + j)].z + vertex[((i+1)*numX + j)].z)/2 + Math.floor((Math.random()*parseInt(document.getElementById("disHigh").value) + parseInt(document.getElementById("disLow").value))));
             vNew.push(v);
         }
 
         for(j = 0; j < numX-1; j++){
             var v = new Vertex((vertex[(i*numX + j)].x + vertex[(i*numX + j + 1)].x)/2,
                 (vertex[(i*numX + j)].y + vertex[(i*numX + j + 1)].y)/2,
-                (vertex[(i*numX + j)].z + vertex[(i*numX + j + 1)].z)/2 + Math.random()*2 - 1);
+                (vertex[(i*numX + j)].z + vertex[(i*numX + j + 1)].z)/2 + Math.floor((Math.random()*parseInt(document.getElementById("disHigh").value) + parseInt(document.getElementById("disLow").value))));
             vNew.push(vertex[(i*numX + j)]);
             vNew.push(v);
         }
