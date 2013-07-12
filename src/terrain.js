@@ -205,7 +205,7 @@ function drawScene3(){
     mat4.identity(mvMatrix);
     //mat4.lookAt([0, 0, 2], [0, 0, 0], [0, 1, 0], mvMatrix);
     //mat4.translate(mvMatrix, [xx , yy, zz]);
-    mat4.translate(mvMatrix, [xx - numX/4, yy-numY/4, zz]);
+    mat4.translate(mvMatrix, [xx - numX/10 - stepX, yy-numY/10, zz]);
     mat4.rotate(mvMatrix, rotX, [1, 0, 0]);
     mat4.rotate(mvMatrix, rotY, [0, 1, 0]);
     mat4.rotate(mvMatrix, rotZ, [0, 0, 1]);
@@ -232,7 +232,7 @@ function drawScene3(){
     mvPopMatrix();
 }
 
-var poop = [[9, 7, 2, -13, -4, -13],
+var orgTerrain = [[9, 7, 2, -13, -4, -13],
         [3, 15, 9, 3, -2, 0],
         [13, 4, 0, -3, -5, -4],
         [3, -3, -6, 1, 0, 5],
@@ -244,49 +244,47 @@ midSteps = parseInt(document.getElementById("midSteps").value);
 stepX = parseInt(document.getElementById("stepX").value);
 stepY = parseInt(document.getElementById("stepY").value);
 
-//poop = new Array();
+orgTerrain[0][0] = parseInt(document.getElementById("t1").value);
+orgTerrain[0][1] = parseInt(document.getElementById("t2").value);
+orgTerrain[0][2] = parseInt(document.getElementById("t3").value);
+orgTerrain[0][3] = parseInt(document.getElementById("t4").value);
+orgTerrain[0][4] = parseInt(document.getElementById("t5").value);
+orgTerrain[0][5] = parseInt(document.getElementById("t6").value); 
 
-poop[0][0] = parseInt(document.getElementById("t1").value);
-poop[0][1] = parseInt(document.getElementById("t2").value);
-poop[0][2] = parseInt(document.getElementById("t3").value);
-poop[0][3] = parseInt(document.getElementById("t4").value);
-poop[0][4] = parseInt(document.getElementById("t5").value);
-poop[0][5] = parseInt(document.getElementById("t6").value); 
+orgTerrain[1][0] = parseInt(document.getElementById("t7").value);
+orgTerrain[1][1] = parseInt(document.getElementById("t8").value);
+orgTerrain[1][2] = parseInt(document.getElementById("t9").value);
+orgTerrain[1][3] = parseInt(document.getElementById("t10").value);
+orgTerrain[1][4] = parseInt(document.getElementById("t11").value);
+orgTerrain[1][5] = parseInt(document.getElementById("t12").value); 
 
-poop[1][0] = parseInt(document.getElementById("t7").value);
-poop[1][1] = parseInt(document.getElementById("t8").value);
-poop[1][2] = parseInt(document.getElementById("t9").value);
-poop[1][3] = parseInt(document.getElementById("t10").value);
-poop[1][4] = parseInt(document.getElementById("t11").value);
-poop[1][5] = parseInt(document.getElementById("t12").value); 
+orgTerrain[2][0] = parseInt(document.getElementById("t13").value);
+orgTerrain[2][1] = parseInt(document.getElementById("t14").value);
+orgTerrain[2][2] = parseInt(document.getElementById("t15").value);
+orgTerrain[2][3] = parseInt(document.getElementById("t16").value);
+orgTerrain[2][4] = parseInt(document.getElementById("t17").value);
+orgTerrain[2][5] = parseInt(document.getElementById("t18").value); 
 
-poop[2][0] = parseInt(document.getElementById("t13").value);
-poop[2][1] = parseInt(document.getElementById("t14").value);
-poop[2][2] = parseInt(document.getElementById("t15").value);
-poop[2][3] = parseInt(document.getElementById("t16").value);
-poop[2][4] = parseInt(document.getElementById("t17").value);
-poop[2][5] = parseInt(document.getElementById("t18").value); 
+orgTerrain[3][0] = parseInt(document.getElementById("t19").value);
+orgTerrain[3][1] = parseInt(document.getElementById("t20").value);
+orgTerrain[3][2] = parseInt(document.getElementById("t21").value);
+orgTerrain[3][3] = parseInt(document.getElementById("t22").value);
+orgTerrain[3][4] = parseInt(document.getElementById("t23").value);
+orgTerrain[3][5] = parseInt(document.getElementById("t24").value);
 
-poop[3][0] = parseInt(document.getElementById("t19").value);
-poop[3][1] = parseInt(document.getElementById("t20").value);
-poop[3][2] = parseInt(document.getElementById("t21").value);
-poop[3][3] = parseInt(document.getElementById("t22").value);
-poop[3][4] = parseInt(document.getElementById("t23").value);
-poop[3][5] = parseInt(document.getElementById("t24").value);
+orgTerrain[4][0] = parseInt(document.getElementById("t25").value);
+orgTerrain[4][1] = parseInt(document.getElementById("t26").value);
+orgTerrain[4][2] = parseInt(document.getElementById("t27").value);
+orgTerrain[4][3] = parseInt(document.getElementById("t28").value);
+orgTerrain[4][4] = parseInt(document.getElementById("t29").value);
+orgTerrain[4][5] = parseInt(document.getElementById("t30").value);  
 
-poop[4][0] = parseInt(document.getElementById("t25").value);
-poop[4][1] = parseInt(document.getElementById("t26").value);
-poop[4][2] = parseInt(document.getElementById("t27").value);
-poop[4][3] = parseInt(document.getElementById("t28").value);
-poop[4][4] = parseInt(document.getElementById("t29").value);
-poop[4][5] = parseInt(document.getElementById("t30").value);  
-
-poop[5][0] = parseInt(document.getElementById("t31").value);
-poop[5][1] = parseInt(document.getElementById("t32").value);
-poop[5][2] = parseInt(document.getElementById("t33").value);
-poop[5][3] = parseInt(document.getElementById("t34").value);
-poop[5][4] = parseInt(document.getElementById("t35").value);
-poop[5][5] = parseInt(document.getElementById("t36").value); 
+orgTerrain[5][0] = parseInt(document.getElementById("t31").value);
+orgTerrain[5][1] = parseInt(document.getElementById("t32").value);
+orgTerrain[5][2] = parseInt(document.getElementById("t33").value);
+orgTerrain[5][3] = parseInt(document.getElementById("t34").value);
+orgTerrain[5][4] = parseInt(document.getElementById("t35").value);
+orgTerrain[5][5] = parseInt(document.getElementById("t36").value); 
 
      
 
@@ -301,7 +299,7 @@ poop[5][5] = parseInt(document.getElementById("t36").value);
             var v = new Vertex(
                 startX + (j*stepX),
                 startY + (i*stepY),
-                poop[i][j]);
+                orgTerrain[i][j]);
             vertex.push(v);
         }
     }
@@ -516,17 +514,17 @@ function handleKeyDown(event) {
     currentlyPressedKeys[event.keyCode] = true;
 
     if (String.fromCharCode(event.keyCode) == "X") {
-        xx += 1;
+        xx += 2;
     } else if (String.fromCharCode(event.keyCode) == "Y") {
-        yy += 1;
+        yy += 2;
     } else if (String.fromCharCode(event.keyCode) == "Z") {
-        zz += 1;
+        zz += 2;
     } else if (String.fromCharCode(event.keyCode) == "S") {
-        xx -= 1;
+        xx -= 2;
     } else if (String.fromCharCode(event.keyCode) == "T") {
-        yy -= 1;
+        yy -= 2;
     } else if (String.fromCharCode(event.keyCode) == "A") {
-        zz -= 1;
+        zz -= 2;
     } else if (String.fromCharCode(event.keyCode) == "R") {
         rotX += 0.1;
     } else if (String.fromCharCode(event.keyCode) == "E") {
