@@ -115,10 +115,10 @@
 <table style="border: 0; padding: 10px;">
     <tr>
         <td>Mid Steps (0 to 5): <input type="text" id="midSteps" value="3" />
-        <td>Step X: <input type="text" id="stepX" value="30" />
-        <td>Step Y: <input type="text" id="stepY" value="30" />
+        <td>Step X: <input type="text" id="stepX" value="40" />
+        <td>Step Y: <input type="text" id="stepY" value="40" />
         <td>Displacement Low: <input type="text" id="disLow" value="1" />
-        <td>Displacement High: <input type="text" id="disHigh" value="3" />
+        <td>Displacement High: <input type="text" id="disHigh" value="2" />
     </tr>
 </table>
 <table>
@@ -144,7 +144,7 @@
     <tr>
         <td><b>Directional Light Colour (0.0 to 1.0):</b></td>
         <td>R: <input type="text" id="directionalR" value="0.0" />
-        <td>G: <input type="text" id="directionalG" value="0.5" />
+        <td>G: <input type="text" id="directionalG" value="0.3" />
         <td>B: <input type="text" id="directionalB" value="0.0" />
     </tr>
 </table>

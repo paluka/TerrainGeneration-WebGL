@@ -185,7 +185,7 @@ function tick() {
     updateHTML();
 }
 
-var xx = -50;
+var xx = -56;
 var yy = -30;
 var zz = -118
 var rotX = -1.2;
@@ -342,7 +342,7 @@ function initVertices(){
             for(j = 0; j < numX-1; j++){
                 var v= new Vertex((vertex[(i*numX + j)].x + vertex[(i*numX + j + 1)].x)/2,
                     (vertex[(i*numX + j)].y + vertex[(i*numX + j + 1)].y)/2,
-                    (vertex[(i*numX + j)].z + vertex[(i*numX + j + 1)].z)/2 + Math.floor((Math.random()*parseInt(document.getElementById("disHigh").value) + parseInt(document.getElementById("disLow").value))));
+                    (vertex[(i*numX + j)].z + vertex[(i*numX + j + 1)].z)/2 + Math.floor((Math.random()*parseFloat(document.getElementById("disHigh").value) + parseFloat(document.getElementById("disLow").value))));
                 vNew.push(vertex[(i*numX + j)]);
                 vNew.push(v);
             }
@@ -351,23 +351,23 @@ function initVertices(){
             for(j = 0; j < numX-1; j++){
                 var v = new Vertex((vertex[(i*numX + j)].x + vertex[(i*numX + j)].x)/2,
                     (vertex[(i*numX + j)].y + vertex[((i+1)*numX + j)].y)/2,
-                    (vertex[(i*numX + j)].z + vertex[((i+1)*numX + j)].z)/2 + Math.floor((Math.random()*parseInt(document.getElementById("disHigh").value) + parseInt(document.getElementById("disLow").value))));
+                    (vertex[(i*numX + j)].z + vertex[((i+1)*numX + j)].z)/2 + Math.floor((Math.random()*parseFloat(document.getElementById("disHigh").value) + parseFloat(document.getElementById("disLow").value))));
                 vNew.push(v);
                 v = new Vertex((vertex[(i*numX + j)].x + vertex[(i*numX + j + 1)].x)/2,
                     (vertex[(i*numX + j)].y + vertex[((i+1)*numX + j + 1)].y)/2,
-                    (vertex[(i*numX + j)].z + vertex[((i+1)*numX + j + 1)].z)/2 + Math.floor((Math.random()*parseInt(document.getElementById("disHigh").value) + parseInt(document.getElementById("disLow").value))));
+                    (vertex[(i*numX + j)].z + vertex[((i+1)*numX + j + 1)].z)/2 + Math.floor((Math.random()*parseFloat(document.getElementById("disHigh").value) + parseFloat(document.getElementById("disLow").value))));
                 vNew.push(v);
             }
             var v = new Vertex((vertex[(i*numX + j)].x + vertex[(i*numX + j)].x)/2,
                 (vertex[(i*numX + j)].y + vertex[((i+1)*numX + j)].y)/2,
-                (vertex[(i*numX + j)].z + vertex[((i+1)*numX + j)].z)/2 + Math.floor((Math.random()*parseInt(document.getElementById("disHigh").value) + parseInt(document.getElementById("disLow").value))));
+                (vertex[(i*numX + j)].z + vertex[((i+1)*numX + j)].z)/2 + Math.floor((Math.random()*parseFloat(document.getElementById("disHigh").value) + parseFloat(document.getElementById("disLow").value))));
             vNew.push(v);
         }
 
         for(j = 0; j < numX-1; j++){
             var v = new Vertex((vertex[(i*numX + j)].x + vertex[(i*numX + j + 1)].x)/2,
                 (vertex[(i*numX + j)].y + vertex[(i*numX + j + 1)].y)/2,
-                (vertex[(i*numX + j)].z + vertex[(i*numX + j + 1)].z)/2 + Math.floor((Math.random()*parseInt(document.getElementById("disHigh").value) + parseInt(document.getElementById("disLow").value))));
+                (vertex[(i*numX + j)].z + vertex[(i*numX + j + 1)].z)/2 + Math.floor((Math.random()*parseFloat(document.getElementById("disHigh").value) + parseFloat(document.getElementById("disLow").value))));
             vNew.push(vertex[(i*numX + j)]);
             vNew.push(v);
         }
