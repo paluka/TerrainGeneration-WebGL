@@ -9,19 +9,25 @@ function Vertex(x, y, z){
     this.nZ = 0;
 }
 
+function Vector(x, y, z){
+    this.x = x;
+    this.y = y;
+    this.z = z;
+}
 
 //Finds the normal vector between 3 vertices
 function findNormal(p1, p2, p3){
 
     //Find the first vector using p1 and p2
-    var vector1 = [(p2.x - p1.x),(p2.y - p1.y),(p2.z - p1.z)];
+    var vector1 = new Vector((p2.x - p1.x),(p2.y - p1.y),(p2.z - p1.z));
+
     //Find the second vector using p1 and p3
-    var vector2 = [(p3.x - p1.x),(p3.y - p1.y),(p3.z - p1.z)];
+    var vector2 = new Vector((p3.x - p1.x),(p3.y - p1.y),(p3.z - p1.z));
     //Now calculate the normal by taking the cross product of the two vectors
     var xComp = (vector1.y*vector2.z) - (vector1.z*vector2.y);
     var yComp = (vector1.z*vector2.x) - (vector1.x*vector2.z);
     var zComp = (vector1.x*vector2.y) - (vector1.y*vector2.x);
-    var normal = [xComp, yComp, zComp];
+    var normal = new Vector(xComp, yComp, zComp);
 
     return normal;
 }
@@ -31,6 +37,10 @@ function initGL(canvas) {
         gl = canvas.getContext("experimental-webgl");
         gl.viewportWidth = canvas.width;
         gl.viewportHeight = canvas.height;
+        
+        if (!gl) {
+          gl = canvas.getContext('webgl');
+        }
     } catch (e) {
     }
     if (!gl) {
@@ -110,6 +120,8 @@ function initShaders() {
     shaderProgram.nMatrixUniform = gl.getUniformLocation(shaderProgram, "uNMatrix");
 
     shaderProgram.ambientColorUniform = gl.getUniformLocation(shaderProgram, "uAmbientColor");
+    shaderProgram.lightingDirectionUniform = gl.getUniformLocation(shaderProgram, "uLightingDirection");
+    shaderProgram.directionalColorUniform = gl.getUniformLocation(shaderProgram, "uDirectionalColor");
 }
 
 
@@ -155,32 +167,30 @@ var colorBuffer;
 var normalBuffer;
 var vertexIndexBuffer
 
-var lastTime = 0;
 
-
-function animate() {
-    var timeNow = new Date().getTime();
-    if (lastTime != 0) {
-        var elapsed = timeNow - lastTime;
-
-
-    }
-    lastTime = timeNow;
+function updateHTML() {    
+    document.getElementById("xTrans").innerHTML = xx;
+    document.getElementById("yTrans").innerHTML = yy;
+    document.getElementById("zTrans").innerHTML = zz;
+    document.getElementById("xRot").innerHTML = rotX.toFixed(2);
+    document.getElementById("yRot").innerHTML = rotY.toFixed(2);
+    document.getElementById("zRot").innerHTML = rotZ.toFixed(2);
+    
 }
 
 
 function tick() {
     requestAnimFrame(tick);
-    drawScene3();
-    animate();
+    drawScene();
+    updateHTML();
 }
 
 var xx = -50;
 var yy = -30;
 var zz = -118
-var rotX = -1.5;
+var rotX = -1.2;
 var rotY = 0;
-var rotZ = -0.1;
+var rotZ = 0;
 
 var vertex;
 
@@ -195,7 +205,7 @@ var numX;
 var numY;
 
 
-function drawScene3(){
+function drawScene(){
     gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     //gl.clearColor(1.0, 1.0, 1.0, 1.0);
@@ -227,6 +237,24 @@ function drawScene3(){
         parseFloat(document.getElementById("ambientB").value)
     );
 
+    var lightingDirection = [
+        parseFloat(document.getElementById("lightDirectionX").value),
+        parseFloat(document.getElementById("lightDirectionY").value),
+        parseFloat(document.getElementById("lightDirectionZ").value)
+    ];
+    var adjustedLD = vec3.create();
+    vec3.normalize(lightingDirection, adjustedLD);
+    vec3.scale(adjustedLD, -1);
+    gl.uniform3fv(shaderProgram.lightingDirectionUniform, adjustedLD);
+
+    gl.uniform3f(
+        shaderProgram.directionalColorUniform,
+        parseFloat(document.getElementById("directionalR").value),
+        parseFloat(document.getElementById("directionalG").value),
+        parseFloat(document.getElementById("directionalB").value)
+    );
+    
+    
     setMatrixUniforms();
     gl.drawArrays(gl.TRIANGLES, 0, terrainBuffer.numItems);
     mvPopMatrix();
@@ -240,51 +268,51 @@ var orgTerrain = [[9, 7, 2, -13, -4, -13],
         [0, 5, 9, 10, 5, 12]];
 
 function initVertices(){
-midSteps = parseInt(document.getElementById("midSteps").value);
-stepX = parseInt(document.getElementById("stepX").value);
-stepY = parseInt(document.getElementById("stepY").value);
+    midSteps = parseInt(document.getElementById("midSteps").value);
+    stepX = parseInt(document.getElementById("stepX").value);
+    stepY = parseInt(document.getElementById("stepY").value);
 
-orgTerrain[0][0] = parseInt(document.getElementById("t1").value);
-orgTerrain[0][1] = parseInt(document.getElementById("t2").value);
-orgTerrain[0][2] = parseInt(document.getElementById("t3").value);
-orgTerrain[0][3] = parseInt(document.getElementById("t4").value);
-orgTerrain[0][4] = parseInt(document.getElementById("t5").value);
-orgTerrain[0][5] = parseInt(document.getElementById("t6").value); 
+    orgTerrain[0][0] = parseInt(document.getElementById("t1").value);
+    orgTerrain[0][1] = parseInt(document.getElementById("t2").value);
+    orgTerrain[0][2] = parseInt(document.getElementById("t3").value);
+    orgTerrain[0][3] = parseInt(document.getElementById("t4").value);
+    orgTerrain[0][4] = parseInt(document.getElementById("t5").value);
+    orgTerrain[0][5] = parseInt(document.getElementById("t6").value); 
 
-orgTerrain[1][0] = parseInt(document.getElementById("t7").value);
-orgTerrain[1][1] = parseInt(document.getElementById("t8").value);
-orgTerrain[1][2] = parseInt(document.getElementById("t9").value);
-orgTerrain[1][3] = parseInt(document.getElementById("t10").value);
-orgTerrain[1][4] = parseInt(document.getElementById("t11").value);
-orgTerrain[1][5] = parseInt(document.getElementById("t12").value); 
+    orgTerrain[1][0] = parseInt(document.getElementById("t7").value);
+    orgTerrain[1][1] = parseInt(document.getElementById("t8").value);
+    orgTerrain[1][2] = parseInt(document.getElementById("t9").value);
+    orgTerrain[1][3] = parseInt(document.getElementById("t10").value);
+    orgTerrain[1][4] = parseInt(document.getElementById("t11").value);
+    orgTerrain[1][5] = parseInt(document.getElementById("t12").value); 
 
-orgTerrain[2][0] = parseInt(document.getElementById("t13").value);
-orgTerrain[2][1] = parseInt(document.getElementById("t14").value);
-orgTerrain[2][2] = parseInt(document.getElementById("t15").value);
-orgTerrain[2][3] = parseInt(document.getElementById("t16").value);
-orgTerrain[2][4] = parseInt(document.getElementById("t17").value);
-orgTerrain[2][5] = parseInt(document.getElementById("t18").value); 
+    orgTerrain[2][0] = parseInt(document.getElementById("t13").value);
+    orgTerrain[2][1] = parseInt(document.getElementById("t14").value);
+    orgTerrain[2][2] = parseInt(document.getElementById("t15").value);
+    orgTerrain[2][3] = parseInt(document.getElementById("t16").value);
+    orgTerrain[2][4] = parseInt(document.getElementById("t17").value);
+    orgTerrain[2][5] = parseInt(document.getElementById("t18").value); 
 
-orgTerrain[3][0] = parseInt(document.getElementById("t19").value);
-orgTerrain[3][1] = parseInt(document.getElementById("t20").value);
-orgTerrain[3][2] = parseInt(document.getElementById("t21").value);
-orgTerrain[3][3] = parseInt(document.getElementById("t22").value);
-orgTerrain[3][4] = parseInt(document.getElementById("t23").value);
-orgTerrain[3][5] = parseInt(document.getElementById("t24").value);
+    orgTerrain[3][0] = parseInt(document.getElementById("t19").value);
+    orgTerrain[3][1] = parseInt(document.getElementById("t20").value);
+    orgTerrain[3][2] = parseInt(document.getElementById("t21").value);
+    orgTerrain[3][3] = parseInt(document.getElementById("t22").value);
+    orgTerrain[3][4] = parseInt(document.getElementById("t23").value);
+    orgTerrain[3][5] = parseInt(document.getElementById("t24").value);
 
-orgTerrain[4][0] = parseInt(document.getElementById("t25").value);
-orgTerrain[4][1] = parseInt(document.getElementById("t26").value);
-orgTerrain[4][2] = parseInt(document.getElementById("t27").value);
-orgTerrain[4][3] = parseInt(document.getElementById("t28").value);
-orgTerrain[4][4] = parseInt(document.getElementById("t29").value);
-orgTerrain[4][5] = parseInt(document.getElementById("t30").value);  
+    orgTerrain[4][0] = parseInt(document.getElementById("t25").value);
+    orgTerrain[4][1] = parseInt(document.getElementById("t26").value);
+    orgTerrain[4][2] = parseInt(document.getElementById("t27").value);
+    orgTerrain[4][3] = parseInt(document.getElementById("t28").value);
+    orgTerrain[4][4] = parseInt(document.getElementById("t29").value);
+    orgTerrain[4][5] = parseInt(document.getElementById("t30").value);  
 
-orgTerrain[5][0] = parseInt(document.getElementById("t31").value);
-orgTerrain[5][1] = parseInt(document.getElementById("t32").value);
-orgTerrain[5][2] = parseInt(document.getElementById("t33").value);
-orgTerrain[5][3] = parseInt(document.getElementById("t34").value);
-orgTerrain[5][4] = parseInt(document.getElementById("t35").value);
-orgTerrain[5][5] = parseInt(document.getElementById("t36").value); 
+    orgTerrain[5][0] = parseInt(document.getElementById("t31").value);
+    orgTerrain[5][1] = parseInt(document.getElementById("t32").value);
+    orgTerrain[5][2] = parseInt(document.getElementById("t33").value);
+    orgTerrain[5][3] = parseInt(document.getElementById("t34").value);
+    orgTerrain[5][4] = parseInt(document.getElementById("t35").value);
+    orgTerrain[5][5] = parseInt(document.getElementById("t36").value); 
 
      
 
@@ -408,7 +436,6 @@ function initBuffers(){
 
             var index = (i*numX + j);
             indexBuffer.push(index);
-            //glNormal3f(vertex.at(index).nX, vertex.at(index).nY, vertex.at(index).nZ);
             vertices.push(vertex[(index)].x);
             vertices.push(vertex[(index)].y);
             vertices.push(vertex[(index)].z);
@@ -419,7 +446,6 @@ function initBuffers(){
 
             index = ((i+1)*numX + j);
             indexBuffer.push(index);
-            //glNormal3f(vertex.at(index).nX, vertex.at(index).nY, vertex.at(index).nZ);
             vertices.push(vertex[(index)].x);
             vertices.push(vertex[(index)].y);
             vertices.push(vertex[(index)].z);
@@ -430,7 +456,6 @@ function initBuffers(){
 
             index = (i*numX + (j+1));
             indexBuffer.push(index);
-            //glNormal3f(vertex.at(index).nX, vertex.at(index).nY, vertex.at(index).nZ);
             vertices.push(vertex[(index)].x);
             vertices.push(vertex[(index)].y);
             vertices.push(vertex[(index)].z);
@@ -441,7 +466,6 @@ function initBuffers(){
 
             index = (i*numX + (j+1));
             indexBuffer.push(index);
-            //glNormal3f(vertex.at(index).nX, vertex.at(index).nY, vertex.at(index).nZ);
             vertices.push(vertex[(index)].x);
             vertices.push(vertex[(index)].y);
             vertices.push(vertex[(index)].z);
@@ -452,7 +476,6 @@ function initBuffers(){
 
             index = ((i+1)*numX + (j+1));
             indexBuffer.push(index);
-            //glNormal3f(vertex.at(index).nX, vertex.at(index).nY, vertex.at(index).nZ);
             vertices.push(vertex[(index)].x);
             vertices.push(vertex[(index)].y);
             vertices.push(vertex[(index)].z);
@@ -463,7 +486,6 @@ function initBuffers(){
 
             index = ((i+1)*numX + j);
             indexBuffer.push(index);
-            //glNormal3f(vertex.at(index).nX, vertex.at(index).nY, vertex.at(index).nZ);
             vertices.push(vertex[(index)].x);
             vertices.push(vertex[(index)].y);
             vertices.push(vertex[(index)].z);
@@ -487,9 +509,11 @@ function initBuffers(){
 
     var d = 0;
     for(d = 0; d < 4*vertices.length; d++){
-        colors.push(0);
-        colors.push(1);
-        colors.push(0);
+        colors.push(0.2);
+        colors.push(0.2);
+        colors.push(0.2);
+        colors.push(1.0);
+        
     }
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
     colorBuffer.itemSize = 4;
@@ -501,12 +525,6 @@ function initBuffers(){
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(ns), gl.STATIC_DRAW);
     normalBuffer.itemSize = 3;
     normalBuffer.numItems = ns.length/3;
-
-    vertexIndexBuffer = gl.createBuffer();
-    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indexBuffer), gl.STATIC_DRAW);
-    vertexIndexBuffer.itemSize = 3;
-    vertexIndexBuffer.numItems = indexBuffer.length/3;
-
 }
 var currentlyPressedKeys = {};
 

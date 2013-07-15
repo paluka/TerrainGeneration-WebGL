@@ -18,7 +18,7 @@
         varying vec3 vLightWeighting;
 
         void main(void) {
-        gl_FragColor = vec4(vColor.rgb* vLightWeighting, 1.0);
+            gl_FragColor = vec4(vColor.rgb* vLightWeighting, vColor.a);
         }
     </script>
 
@@ -39,15 +39,12 @@
         varying vec3 vLightWeighting;
 
         void main(void) {
-        gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
-        vColor = aVertexColor;
+            gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
+            vColor = aVertexColor;
 
-
-
-
-        vec3 transformedNormal = uNMatrix * aVertexNormal;
-        float directionalLightWeighting = max(dot(transformedNormal, uLightingDirection), 0.0);
-        vLightWeighting = uAmbientColor + uDirectionalColor * directionalLightWeighting;
+            vec3 transformedNormal = uNMatrix * aVertexNormal;
+            float directionalLightWeighting = max(dot(transformedNormal, uLightingDirection), 0.0);
+            vLightWeighting = uAmbientColor + uDirectionalColor * directionalLightWeighting;
 
         }
     </script>
@@ -82,7 +79,7 @@
         <div style="width:900px; margin-top:40px;">
     <div id="raytracer" style="text-align: center">
     <br />
-            <h3>Random terrain generation using the midpoint displacement algorithm, WebGL, JavaScript and HTML5</h3>
+            <h3>Random terrain generation using the midpoint displacement algorithm in WebGL. <br>Vertex normals are calculated to perform the directional lighting.</h3>
             <br />
 		<p>Change the settings and click the button to render the terrain again</p><br>
         <p>Use 'A' and 'Z' to move along the Z axis</p>
@@ -98,6 +95,21 @@
 
 <canvas id="canvas1" style="border: dotted; width: 100%; height: 100%" ></canvas>
 <br/>
+<div>
+<span style="font-weight:bold;">X Translation:</span>
+<span id="xTrans"> </span>
+<span style="font-weight:bold;">Y Translation:</span>
+<span id="yTrans"> </span>
+<span style="font-weight:bold;">Z Translation:</span>
+<span id="zTrans"> </span>
+<br>
+<span style="font-weight:bold;">X Rotation:</span>
+<span id="xRot"> </span>
+<span style="font-weight:bold;">Y Rotation:</span>
+<span id="yRot"> </span>
+<span style="font-weight:bold;">Z Rotation:</span>
+<span id="zRot"> </span>
+</div>
 <h3>Settings:</h3>
 
 <table style="border: 0; padding: 10px;">
@@ -109,20 +121,33 @@
         <td>Displacement High: <input type="text" id="disHigh" value="3" />
     </tr>
 </table>
-<h3>Ambient Light Colour (0.0 to 1.0):</h3>
-<table style="border: 0; padding: 10px;">
+<table>
     <tr>
-        <td>R: <input type="text" id="ambientR" value="0.0" />
-        <td>G: <input type="text" id="ambientG" value="1.0" />
-        <td>B: <input type="text" id="ambientB" value="0.0" />
+        <td style="padding-left:130px;"><div onclick="webGLStart();"  class="button" >Click here to draw terrain</div></td>
     </tr>
 </table>
-<table>
-<tr>
-    <td style="padding-left:130px;"><div onclick="webGLStart();"  class="button" >Click here to draw terrain</div></td>
+    <br>
+    <h3>Light:</h3>
+<table style="border: 0; padding: 10px;">
+    <tr>
+        <td><b>Ambient Light Colour (0.0 to 1.0):</b></td>
+        <td>R: <input type="text" id="ambientR" value="0.0" />
+        <td>G: <input type="text" id="ambientG" value="0.5" />
+        <td>B: <input type="text" id="ambientB" value="0.0" />
     </tr>
-    </table>
-<br>
+    <tr>
+        <td><b>Directional Light Direction:</b></td>
+        <td>X: <input type="text" id="lightDirectionX" value="-0.25" />
+        <td>Y: <input type="text" id="lightDirectionY" value="-0.25" />
+        <td>Z: <input type="text" id="lightDirectionZ" value="-1.0" />
+    </tr>
+    <tr>
+        <td><b>Directional Light Colour (0.0 to 1.0):</b></td>
+        <td>R: <input type="text" id="directionalR" value="0.0" />
+        <td>G: <input type="text" id="directionalG" value="0.5" />
+        <td>B: <input type="text" id="directionalB" value="0.0" />
+    </tr>
+</table>
 
 <h3>Original Terrain:</h3>
 
