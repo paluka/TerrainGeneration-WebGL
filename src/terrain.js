@@ -44,7 +44,7 @@ function initGL(canvas) {
     } catch (e) {
     }
     if (!gl) {
-        alert("Could not initialise WebGL, sorry :-(");
+        alert("Sorry, but your browser does not support WebGL or does not have it enabled. To get a WebGL-enabled browser, please see: http://get.webgl.org/");
     }
 }
 
@@ -560,20 +560,22 @@ function handleKeyDown(event) {
 }
 function webGLStart() {
     //if (navigator.appName != 'Microsoft Internet Explorer'){
-    //	document.getElementById("wgl").style.display = "block";
+    //    document.getElementById("wgl").style.display = "block";
     var canvas = document.getElementById("canvas1");
 
     //if (canvas.getContext){
     //document.getElementById("wgl").style.display = "block";
     document.onkeydown = handleKeyDown;
     initGL(canvas);
-    initShaders()
-    initVertices();
-    initBuffers();
+    if(gl){
+        initShaders()
+        initVertices();
+        initBuffers();
 
-    gl.clearColor(0.0, 0.0, 0.0, 1.0);
-    gl.enable(gl.DEPTH_TEST);
+        gl.clearColor(0.0, 0.0, 0.0, 1.0);
+        gl.enable(gl.DEPTH_TEST);
 
-    tick();
+        tick();
+    }
     //}
 }
